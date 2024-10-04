@@ -1,11 +1,11 @@
-import './Home.css'
+import "./Home.css";
 
 function Home() {
   return (
-    <div>
-      <h1>Home</h1>
+    <div className='home-container'>
+      <h1>Introduce your self</h1>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

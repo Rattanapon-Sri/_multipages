@@ -2,8 +2,14 @@ import "./Footer.css";
 
 function Footer() {
   return (
-    <div>
-      <h1>Footer</h1>
+    <div className='footer-container'>
+      <h1>
+        <span className="badge bg-dark">SPU</span>
+        &nbsp;&minus;&nbsp;
+        <span className="badge bg-info">SIT</span>
+        &nbsp;&minus;&nbsp; 
+        <span className="badge bg-primary">CSI</span>
+      </h1>
     </div>
   );
 }

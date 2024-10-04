@@ -2,8 +2,8 @@ import "./Header.css";
 
 function Header() {
   return (
-    <div>
-      <h1>Header</h1>
+    <div className="header-container">
+      <h1><span className="badge bg-dark">CSI205 Front End Software Development</span></h1>
     </div>
   );
 }
