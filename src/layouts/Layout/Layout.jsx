@@ -1,13 +1,14 @@
-import { Outlet } from "react-router";
+import { Outlet } from "react-router-dom";
 import Header from "../Header/Header";
 import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 import "./Layout.css";
 
-function Layout() {
+function Layout({ tab, setTab }) {
   return (
     <div>
       <Header />
-      <Navbar />
+      <Navbar tab={tab} setTab={setTab} />
       <Outlet />
       <Footer />
     </div>
