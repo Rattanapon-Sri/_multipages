@@ -1,10 +1,11 @@
 import React from 'react'
 import './Calculator.css'
+import Cal from '../../components/Cal/Cal'
 
 function Calculator() {
   return (
-    <div>
-      <h1>Calculator</h1>
+    <div className='calulator-container'>
+      <Cal />
     </div>
   )
 }
