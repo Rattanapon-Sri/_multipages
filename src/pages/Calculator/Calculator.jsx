@@ -8,5 +8,4 @@ function Calculator() {
     </div>
   )
 }
-
 export default Calculator
