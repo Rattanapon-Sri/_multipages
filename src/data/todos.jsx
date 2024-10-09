@@ -1211,5 +1211,5 @@ const todos = [
 ];
 
 export function fetchTodos() {
-    return todos.slice(0,13);
+    return todos.slice(0,21);
 }
