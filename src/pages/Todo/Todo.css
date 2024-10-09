@@ -1,0 +1,9 @@
+.todo-container {
+    border: solid 1px;
+}
+
+.to-filters-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

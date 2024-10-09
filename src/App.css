@@ -8,4 +8,5 @@
 .app-container {
   border: 1px dashed red;
   width: 1020px;
+  box-shadow: 10px 10px 10px rgb(0, 0, 0);
 }
