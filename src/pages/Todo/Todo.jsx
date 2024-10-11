@@ -1,53 +1,152 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useRef } from "react";
+
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
+import Form from "react-bootstrap/Form";
+
 import { fetchTodos } from "../../data/todos";
 
 import "./Todo.css";
 
+const initItemsPerPage = 5;
+const initOnlyWaiting = false;
+
 function Todo() {
-  //todoRaw -> filters -> todos -> display
-  //todosRaw
+  // todosRaw -> filters -> todos -> display
   const [todosRaw, setTodosRaw] = useState([]);
-  //filters
   const [onlyWaiting, setOnlyWaiting] = useState(false);
-  const [itemsPerPage, setItemsPerPage] = useState(5);
-  //todos
   const [todos, setTodos] = useState([]);
-  //display
-  const [numPages, setNumPages] = useState(1);
-  const [curPage, setCurPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(0);
+  const [numPages, setNumPages] = useState(0);
+  const [curPage, setCurPage] = useState(0);
 
-  useEffect(() => {
-    console.log(`curPage: ${curPage}`);
-  }, [curPage]);
-
-  useEffect(() => {
-    console.log(`itemsPerPage: ${itemsPerPage}`);
-    setNumPages(Math.ceil(todosRaw.length / itemsPerPage));
-    setCurPage(1);
-  }, [itemsPerPage, todosRaw]);
-
-  useEffect(() => {
-    console.log(`onlyWaiting: ${onlyWaiting}`);
-  }, [onlyWaiting]);
+  const itemsPerPageRef = useRef();
+  const onlyWaitingRef = useRef();
 
   useEffect(() => {
     setTodosRaw(fetchTodos());
-    setCurPage(1);
-  }, []); //load เท่านั้น
+    setOnlyWaiting(initOnlyWaiting);
+    itemsPerPageRef.current.value = initItemsPerPage;
+    setItemsPerPage(initItemsPerPage);
+    onlyWaitingRef.current.checked = initOnlyWaiting;
+  }, []);
 
   useEffect(() => {
     if (onlyWaiting) {
       setTodos(todosRaw.filter((todo) => !todo.completed));
     } else {
-      //show all
       setTodos(todosRaw);
     }
-  }, [todosRaw, onlyWaiting, itemsPerPage]); //
+  }, [todosRaw, onlyWaiting]);
+
+  useEffect(() => {
+    setNumPages(Math.ceil(todos.length / itemsPerPage));
+  }, [todos, itemsPerPage]);
+
+  useEffect(() => {
+    if (numPages <= 0) setCurPage(0);
+    else if (curPage === 0) setCurPage(1);
+    else if (curPage > numPages) setCurPage(numPages);
+  }, [numPages]);
+
+  // event handlers
+  const deleteClick = (id) => {
+    setTodosRaw(todosRaw.filter((todo) => todo.id !== id));
+  };
+
+  const waintingClick = (id) => {
+    const todoSelected = todosRaw.find((todo) => {
+      return todo.id === id;
+    });
+
+    todoSelected.completed = true;
+
+    // setTodosRaw(todosRaw); // dosen't work, state is not changed
+    setTodosRaw([...todosRaw]); // Ok
+  };
+
+  const addClick = (id, title) => {
+    const newTodo = {
+      userId: 1,
+      id: id,
+      title: title,
+      completed: false,
+    };
+    // todosRaw.push(newTodo); // don't work, state is not changed
+
+    setTodosRaw([...todosRaw, newTodo]); //ok
+  };
+
+  // Modalhandler
+  const [show, setShow] = useState(false);
+
+  const idRef = useRef();
+  const titleRef = useRef();
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   return (
     <div className='todo-container'>
+      {/* Modal */}
+      <Modal show={show} onHide={handleClose} animation={false}>
+        <Modal.Header closeButton>
+          <Modal.Title>
+            <span className='bi bi-plus-lg'>&nbsp;Add Todo</span>
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <Form>
+            <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
+              <Form.Label>ID : </Form.Label>
+              <Form.Control
+                type='number'
+                autoFocus
+                value={
+                  Number(
+                    todosRaw.reduce((prev, todo) => {
+                      return prev < todo.id ? todo.id : prev;
+                    }, 0)
+                  ) + 1
+                }
+                disabled
+                ref={idRef}
+              />
+            </Form.Group>
+            <Form.Group className='mb-3' controlId='exampleForm.ControlInput1'>
+              <Form.Label>Title</Form.Label>
+              <Form.Control type='text' autoFocus ref={titleRef} />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button variant='secondary' onClick={handleClose}>
+            <span className='bi bi-x-lg'>&nbsp;Cancel</span>
+          </Button>
+          <Button
+            variant='primary'
+            onClick={() => {
+              const id = idRef.current.value;
+              const title = titleRef.current.value.trim();
+              if (title === "") {
+                alert("Title cannot be empty");
+                titleRef.current.value = "";
+                titleRef.current.focus();
+              } else {
+                addClick(id, title);
+                handleClose();
+              }
+            }}
+          >
+            <span className='bi bi-plus-lg'>&nbsp;Add</span>
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
       {/* filters */}
-      <div className='to-filters-container'>
+      <div className='todo-filters-container'>
         <div className='form-check form-switch'>
           <input
             className='form-check-input'
@@ -55,88 +154,155 @@ function Todo() {
             role='switch'
             id='flexSwitchCheckChecked'
             // checked
-            onClick={(e) => {
+            onChange={(e) => {
               setOnlyWaiting(e.target.checked);
             }}
+            ref={onlyWaitingRef}
           />
           <label className='form-check-label' htmlFor='flexSwitchCheckChecked'>
-            Show Only waiting
+            Show only&nbsp;
+            <button className='btn btn-warning'>
+              waiting&nbsp;
+              <span className='bi bi-clock'></span>
+            </button>
           </label>
         </div>
-
         <select
           className='form-select'
           aria-label='Default select example'
+          defaultValue={5}
           style={{ width: "200px" }}
           onChange={(e) => {
             setItemsPerPage(e.target.value);
           }}
+          ref={itemsPerPageRef}
         >
-          <option value={5}>5 items per pages</option>
-          <option value={10}>10 items per pages</option>
-          <option value={50}>50 items per pages</option>
-          <option value={100}>100 items per pages</option>
+          <option value={5}>5 items per page</option>
+          <option value={10}>10 items per page</option>
+          <option value={50}>50 items per page</option>
+          <option value={100}>100 items per page</option>
         </select>
       </div>
 
       {/* table */}
-      <table className='table table-striped table-hover'>
+      <table className='table table-striped todo-table'>
         <thead className='table-dark'>
           <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th style={{ textAlign: "right" }}>Completed</th>
+            <th style={{ width: "10%" }} valign='middle'>
+              ID
+            </th>
+            <th valign='middle'>Title</th>
+            <th style={{ textAlign: "right", width: "20%" }} valign='middle'>
+              Completed&nbsp;
+              <button
+                className='btn btn-primary'
+                onClick={() => {
+                  handleShow();
+                }}
+              >
+                <span className='bi bi-plus'></span>
+              </button>
+            </th>
           </tr>
         </thead>
-
         <tbody>
-          {todos.map((todo) => {
-            return (
-              <tr key={todo.id}>
-                <td>
-                  <span className='badge bg-secondary'>{todo.id}</span>
-                </td>
-                <td style={{ textAlign: "left" }}>{todo.title}</td>
-                <td style={{ textAlign: "right" }}>
+          {
+            // itemsPerPage = 5
+            // curPage = 1
+            // items (human) => (1, ..., 5)
+            // items (js*) => (0, ...,4)
+            // items (js*) => (min, ..., max)
+            // min = (curPage - 1) * itemsPerPage
+            // max = Curpage * itemsPerPage - 1
+            todos
+              .filter((todo, index) => {
+                const min = (curPage - 1) * itemsPerPage;
+                const max = curPage * itemsPerPage - 1;
+                return index >= min && index <= max;
+              })
+              .map((todo) => {
+                return (
+                  <tr key={todo.id}>
+                    <td valign='middle'>
+                      <span
+                        className='badge bg-secondary'
+                        style={{ width: "3rem" }}
+                      >
+                        {todo.id}
+                      </span>
+                    </td>
+                    <td style={{ textAlign: "left" }} valign='middle'>
+                      {todo.title}
+                    </td>
+                    <td style={{ textAlign: "right" }} valign='middle'>
+                      {/* 
                   <span
                     className={
-                      "badge " + (todo.completed ? "bg-success" : "bg-warning")
+                      'badge ' + (todo.completed ? 'bg-success' : 'bg-warning')
                     }
                   >
-                    {todo.completed ? "done" : "waiting"}&nbsp;
+                    {todo.completed ? 'done' : 'waiting'}
+                    &nbsp;
                     <span
                       className={
-                        "bi " + (todo.completed ? "bi-check" : "bi-clock")
+                        'bi ' + (todo.completed ? 'bi-check' : 'bi-clock')
                       }
                     ></span>
                   </span>
-                  &nbsp;
-                  <button className='btn btn-danger'>
-                    <span className='bi bi-trash'></span>
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
+                  */}
+                      {todo.completed ? (
+                        <span className='badge bg-success'>
+                          done&nbsp;
+                          <span className='bi bi-check'></span>
+                        </span>
+                      ) : (
+                        <button
+                          className='btn btn-warning'
+                          onClick={() => {
+                            waintingClick(todo.id);
+                          }}
+                        >
+                          waiting&nbsp;
+                          <span className='bi bi-clock'></span>
+                        </button>
+                      )}
+                      &nbsp;
+                      <button
+                        className='btn btn-danger'
+                        onClick={() => {
+                          deleteClick(todo.id);
+                        }}
+                      >
+                        <span className='bi bi-trash'></span>
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })
+          }
         </tbody>
       </table>
 
       {/* page control */}
       <div>
         <button
-          className='btn btn-outline-primary todo-space'
+          className={
+            "todo-space btn " +
+            (curPage <= 1 ? "btn-outline-secondary" : "btn-outline-primary")
+          }
           onClick={() => {
             setCurPage(1);
           }}
-          disabled={curPage === 1}
+          disabled={curPage <= 1}
         >
           First
         </button>
         <button
-          className='btn btn-outline-primary todo-space'
-          onClick={() => {
-            curPage > 1 && setCurPage(curPage - 1);
-          }}
+          className={
+            "todo-space btn " +
+            (curPage <= 1 ? "btn-outline-secondary" : "btn-outline-primary")
+          }
+          onClick={() => curPage > 1 && setCurPage(curPage - 1)}
           disabled={curPage <= 1}
         >
           Previous
@@ -145,20 +311,28 @@ function Todo() {
           {curPage}&nbsp;/&nbsp;{numPages}
         </span>
         <button
-          className='btn btn-outline-primary todo-space'
-          onClick={() => {
-            curPage < numPages && setCurPage(curPage + 1);
-          }}
+          className={
+            "todo-space btn " +
+            (curPage >= numPages
+              ? "btn-outline-secondary"
+              : "btn-outline-primary")
+          }
+          onClick={() => curPage < numPages && setCurPage(curPage + 1)}
           disabled={curPage >= numPages}
         >
           Next
         </button>
         <button
-          className='btn btn-outline-primary todo-space'
+          className={
+            "todo-space btn " +
+            (curPage >= numPages
+              ? "btn-outline-secondary"
+              : "btn-outline-primary")
+          }
           onClick={() => {
             setCurPage(numPages);
           }}
-          disabled={curPage === numPages}
+          disabled={curPage >= numPages}
         >
           Last
         </button>
