@@ -4,11 +4,11 @@ import Navbar from "../Navbar/Navbar";
 import Footer from "../Footer/Footer";
 import "./Layout.css";
 
-function Layout({ tab, setTab }) {
+function Layout({ tab, setTab , products, carts}) {
   return (
     <div>
       <Header />
-      <Navbar tab={tab} setTab={setTab} />
+      <Navbar tab={tab} setTab={setTab} products={products} carts={carts}/>
       <Outlet />
       <Footer />
     </div>

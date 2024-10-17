@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import "./Navbar.css";
 
-function Navbar({ tab, setTab }) {
+function Navbar({ tab, setTab, products, carts }) {
   return (
     <div className='navbar-container'>
       <Link to={"/home"}>
@@ -61,26 +61,34 @@ function Navbar({ tab, setTab }) {
       <Link to={"/products"}>
         <button
           className={
-            "btn " + (tab === "products" ? "btn-primary" : "btn-outline-primary")
+            "btn " +
+            (tab === "products" ? "btn-primary" : "btn-outline-primary")
           }
           onClick={() => {
             setTab("products");
           }}
         >
-          Products
+          Products ({products.length})
         </button>
       </Link>
 
       <Link to={"/carts"}>
         <button
           className={
-            "btn " + (tab === "carts" ? "btn-primary" : "btn-outline-primary")
+            "position-relative btn " +
+            (tab === "carts" ? "btn-primary" : "btn-outline-primary")
           }
           onClick={() => {
             setTab("carts");
           }}
         >
           Carts
+          {carts.length > 0 && (
+            <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
+              {carts.length < 10 ? carts.length : "9+"}
+              <span class='visually-hidden'>unread messages</span>
+            </span>
+          )}
         </button>
       </Link>
     </div>
