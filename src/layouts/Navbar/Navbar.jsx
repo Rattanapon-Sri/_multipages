@@ -1,98 +1,105 @@
-import { Link } from "react-router-dom";
-import "./Navbar.css";
+import { Link } from 'react-router-dom'
+import './Navbar.css'
 
-function Navbar({ tab, setTab, products, carts }) {
+function Navbar({ tab, setTab, products, carts, setToken, role }) {
   return (
     <div className='navbar-container'>
-      <Link to={"/home"}>
+      <Link to={'/home'}>
         <button
           className={
-            "btn " + (tab === "home" ? "btn-primary" : "btn-outline-primary")
+            'btn ' + (tab === 'home' ? 'btn-primary' : 'btn-outline-primary')
           }
           onClick={() => {
-            setTab("home");
+            setTab('home')
           }}
         >
           Home
         </button>
       </Link>
-
-      <Link to={"/calculator"}>
+      <Link to={'/calculator'}>
         <button
           className={
-            "btn " +
-            (tab === "calculator" ? "btn-primary" : "btn-outline-primary")
+            'btn ' +
+            (tab === 'calculator' ? 'btn-primary' : 'btn-outline-primary')
           }
           onClick={() => {
-            setTab("calculator");
+            setTab('calculator')
           }}
         >
           Calculator
         </button>
       </Link>
 
-      <Link to={"/components"}>
+      <Link to={'/components'}>
         <button
           className={
-            "btn " +
-            (tab === "components" ? "btn-primary" : "btn-outline-primary")
+            'btn ' +
+            (tab === 'components' ? 'btn-primary' : 'btn-outline-primary')
           }
           onClick={() => {
-            setTab("components");
+            setTab('components')
           }}
         >
           Components
         </button>
       </Link>
 
-      <Link to={"/todo"}>
+      <Link to={'/todo'}>
         <button
           className={
-            "btn " + (tab === "todo" ? "btn-primary" : "btn-outline-primary")
+            'btn ' + (tab === 'todo' ? 'btn-primary' : 'btn-outline-primary')
           }
           onClick={() => {
-            setTab("todo");
+            setTab('todo')
           }}
         >
           Todo
         </button>
       </Link>
 
-      <Link to={"/products"}>
+      <Link to={'/products'}>
         <button
           className={
-            "btn " +
-            (tab === "products" ? "btn-primary" : "btn-outline-primary")
+            'btn ' +
+            (tab === 'products' ? 'btn-primary' : 'btn-outline-primary')
           }
           onClick={() => {
-            setTab("products");
+            setTab('products')
           }}
         >
           Products ({products.length})
         </button>
       </Link>
 
-      <Link to={"/carts"}>
+      <Link to={'/carts'}>
         <button
           className={
-            "position-relative btn " +
-            (tab === "carts" ? "btn-primary" : "btn-outline-primary")
+            'position-relative btn ' +
+            (tab === 'carts' ? 'btn-primary' : 'btn-outline-primary')
           }
           onClick={() => {
-            setTab("carts");
+            setTab('carts')
           }}
         >
           Carts
           {carts.length > 0 && (
             <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
-              {carts.length < 10 ? carts.length : "9+"}
+              {carts.length < 10 ? carts.length : '9+'}
               <span class='visually-hidden'>unread messages</span>
             </span>
           )}
         </button>
       </Link>
+
+      <button
+        className='btn btn-outline-danger'
+        style={{ marginLeft: '1rem' }}
+        onClick={() => setToken('')}
+      >
+        Logout
+      </button>
     </div>
-  );
+  )
 }
 
-export default Navbar;
+export default Navbar
