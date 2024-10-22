@@ -1,59 +1,64 @@
-import React, { useState, useEffect } from 'react';
-import './Cal.css';
+import React, { useState, useEffect } from 'react'
+import './Cal.css'
 
 function Cal() {
-  const [input, setInput] = useState('0');
+  const [input, setInput] = useState('0')
 
   const handleButtonClick = (value) => {
     if (value === 'C') {
-      setInput('0');
+      setInput('0')
     } else if (value === '=') {
       try {
-        setInput(eval(input).toString());
+        setInput(eval(input).toString())
       } catch (error) {
-        setInput('Error');
+        setInput('Error')
       }
+    } else if (value === '+/-') {
+      // เปลี่ยนสัญญาณของเลขสุดท้าย
+      const newInput = input.endsWith('-') ? input.slice(0, -1) : input + '-'
+      setInput(newInput)
     } else {
       if (input === '0' && value !== '.') {
-        setInput(value);
+        setInput(value)
       } else {
-        const lastChar = input[input.length - 1];
-        const operators = ['+', '-', '*', '/'];
+        const lastChar = input[input.length - 1]
+        const operators = ['+', '-', '*', '/']
 
         if (operators.includes(lastChar) && operators.includes(value)) {
-          return;
+          // เปลี่ยนเครื่องหมาย
+          setInput((prev) => prev.slice(0, -1) + value)
         } else {
-          setInput((prev) => prev + value);
+          setInput((prev) => prev + value)
         }
       }
     }
-  };
+  }
 
   const handleKeyPress = (event) => {
-    const key = event.key;
-    const operators = ['+', '-', '*', '/', '.', 'C'];
+    const key = event.key
+    const operators = ['+', '-', '*', '/', '.', 'C']
 
     if (key >= '0' && key <= '9') {
-      handleButtonClick(key);
-    } else if (key === '=' || key === '+') {
-      handleButtonClick(key === '=' ? '+' : '+');
+      handleButtonClick(key)
+    } else if (key === '=') {
+      handleButtonClick('+')
     } else if (operators.includes(key)) {
-      handleButtonClick(key);
+      handleButtonClick(key)
     } else if (key === 'Enter') {
-      handleButtonClick('=');
+      handleButtonClick('=')
     } else if (key === 'Backspace') {
-      setInput((prev) => prev.slice(0, -1));
+      setInput((prev) => prev.slice(0, -1))
     } else if (key === 'Escape') {
-      handleButtonClick('C');
+      handleButtonClick('C')
     }
-  };
+  }
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
+    window.addEventListener('keydown', handleKeyPress)
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
-    };
-  }, [input]);
+      window.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [input])
 
   return (
     <div className='cal-container'>
@@ -71,7 +76,7 @@ function Cal() {
               C
             </td>
             <td className='cal-color' onClick={() => handleButtonClick('+/-')}>
-              +/- 
+              +/-
             </td>
             <td className='cal-color' onClick={() => handleButtonClick('%')}>
               %
@@ -81,32 +86,58 @@ function Cal() {
             </td>
           </tr>
           <tr>
-            <td className='num-color' onClick={() => handleButtonClick('7')}>7</td>
-            <td className='num-color' onClick={() => handleButtonClick('8')}>8</td>
-            <td className='num-color' onClick={() => handleButtonClick('9')}>9</td>
+            <td className='num-color' onClick={() => handleButtonClick('7')}>
+              7
+            </td>
+            <td className='num-color' onClick={() => handleButtonClick('8')}>
+              8
+            </td>
+            <td className='num-color' onClick={() => handleButtonClick('9')}>
+              9
+            </td>
             <td className='cal-color' onClick={() => handleButtonClick('*')}>
               &times;
             </td>
           </tr>
           <tr>
-            <td className='num-color' onClick={() => handleButtonClick('4')}>4</td>
-            <td className='num-color' onClick={() => handleButtonClick('5')}>5</td>
-            <td className='num-color' onClick={() => handleButtonClick('6')}>6</td>
+            <td className='num-color' onClick={() => handleButtonClick('4')}>
+              4
+            </td>
+            <td className='num-color' onClick={() => handleButtonClick('5')}>
+              5
+            </td>
+            <td className='num-color' onClick={() => handleButtonClick('6')}>
+              6
+            </td>
             <td className='cal-color' onClick={() => handleButtonClick('-')}>
               &minus;
             </td>
           </tr>
           <tr>
-            <td className='num-color' onClick={() => handleButtonClick('1')}>1</td>
-            <td className='num-color' onClick={() => handleButtonClick('2')}>2</td>
-            <td className='num-color' onClick={() => handleButtonClick('3')}>3</td>
+            <td className='num-color' onClick={() => handleButtonClick('1')}>
+              1
+            </td>
+            <td className='num-color' onClick={() => handleButtonClick('2')}>
+              2
+            </td>
+            <td className='num-color' onClick={() => handleButtonClick('3')}>
+              3
+            </td>
             <td className='cal-color' onClick={() => handleButtonClick('+')}>
               +
             </td>
           </tr>
           <tr>
-            <td className='num-color' colSpan='2' onClick={() => handleButtonClick('0')}>0</td>
-            <td className='num-color' onClick={() => handleButtonClick('.')}>.</td>
+            <td
+              className='num-color'
+              colSpan='2'
+              onClick={() => handleButtonClick('0')}
+            >
+              0
+            </td>
+            <td className='num-color' onClick={() => handleButtonClick('.')}>
+              .
+            </td>
             <td className='cal-color' onClick={() => handleButtonClick('=')}>
               =
             </td>
@@ -114,7 +145,7 @@ function Cal() {
         </tbody>
       </table>
     </div>
-  );
+  )
 }
 
-export default Cal;
+export default Cal
