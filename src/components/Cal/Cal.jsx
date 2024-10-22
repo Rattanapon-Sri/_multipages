@@ -1,213 +1,59 @@
-import React, { useState, useEffect } from 'react'
-import './Cal.css'
+import React, { useState, useEffect } from 'react';
+import './Cal.css';
 
 function Cal() {
-  // เริ่มต้นหน้าจอ
-  const [screenDisplay, setScreenDisplay] = useState('0')
-  const [firstOperand, setFirstOperand] = useState(null)
-  const [secondOperand, setSecondOperand] = useState(null)
-  const [currentOperator, setCurrentOperator] = useState(null)
-  const [lastOperator, setLastOperator] = useState(null)
-  const [lastSecondOperand, setLastSecondOperand] = useState(null)
-  const [result, setResult] = useState(null)
-  const [resetDisplay, setResetDisplay] = useState(false)
-  const [acPressed, setAcPressed] = useState(false)
+  const [input, setInput] = useState('0');
 
-  useEffect(() => {
-    updateDisplay()
-  }, [screenDisplay])
-
-  useEffect(() => {
-    // ฟังก์ชันที่ใช้จัดการกับการกดคีย์บอร์ด
-    const handleKeyDown = (event) => {
-      const { key } = event;
-
-      // ตรวจสอบว่ากดตัวเลข
-      if (!isNaN(key)) {
-        inputNumber(key);
+  const handleButtonClick = (value) => {
+    if (value === 'C') {
+      setInput('0');
+    } else if (value === '=') {
+      try {
+        setInput(eval(input).toString());
+      } catch (error) {
+        setInput('Error');
       }
-      // ตรวจสอบเครื่องหมายทางคณิตศาสตร์
-      else if (['+', '-', '*', '/'].includes(key)) {
-        inputOperator(key);
-      }
-      // ตรวจสอบการกด Enter เพื่อคำนวณ
-      else if (key === 'Enter') {
-        calculate();
-      }
-      // ตรวจสอบการกดปุ่ม C เพื่อล้างหน้าจอ
-      else if (key === 'c' || key === 'C') {
-        clearDisplay();
-      }
-      // ตรวจสอบการกดปุ่มจุดทศนิยม
-      else if (key === '.') {
-        inputDecimal();
-      }
-      // ตรวจสอบการเปลี่ยนสัญญาณ
-      else if (key === '+-' || key === '±') {
-        inputSignChange();
-      }
-    };
-
-    // เพิ่ม event listener
-    window.addEventListener('keydown', handleKeyDown);
-
-    // ลบ event listener เมื่อ component ถูก unmount
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [screenDisplay, currentOperator, firstOperand]);
-
-  // อัพเดตหน้าจอ
-  function updateDisplay() {
-    if (screenDisplay !== 'Error') {
-      document.getElementById('display').value =
-        parseFloat(screenDisplay).toLocaleString('en')
     } else {
-      document.getElementById('display').value = screenDisplay
-    }
-  }
+      if (input === '0' && value !== '.') {
+        setInput(value);
+      } else {
+        const lastChar = input[input.length - 1];
+        const operators = ['+', '-', '*', '/'];
 
-  // ฟังก์ชันสำหรับกรอกตัวเลข
-  function inputNumber(number) {
-    if (screenDisplay.length >= 9 && !resetDisplay) {
-      return
-    }
-
-    if (resetDisplay) {
-      setScreenDisplay(number.toString())
-      setResetDisplay(false)
-    } else {
-      setScreenDisplay((prevDisplay) =>
-        prevDisplay === '0'
-          ? number.toString()
-          : prevDisplay + number.toString()
-      )
-    }
-
-    if (currentOperator === null) {
-      console.log(
-        `'${screenDisplay}' --> "first": first : '${screenDisplay}' , second : '0' , operator : '?' --> ${screenDisplay}`
-      )
-    } else {
-      console.log(
-        `'${screenDisplay}' --> "second": first : '${firstOperand}' , second : '${screenDisplay}' , operator : '${currentOperator}' --> `
-      )
-    }
-    setAcPressed(false)
-  }
-
-  // ฟังก์ชันสำหรับกรอกจุดทศนิยม
-  function inputDecimal() {
-    if (resetDisplay) {
-      setScreenDisplay('0.')
-      setResetDisplay(false)
-    } else if (!screenDisplay.includes('.')) {
-      setScreenDisplay((prevDisplay) => prevDisplay + '.')
-    }
-    setAcPressed(false)
-  }
-
-  // ฟังก์ชันสำหรับกรอกเครื่องหมาย
-  function inputOperator(operator) {
-    if (currentOperator !== null && resetDisplay) {
-      setCurrentOperator(operator)
-      setLastOperator(operator)
-      return
-    }
-
-    if (currentOperator !== null) {
-      calculate()
-    }
-
-    setFirstOperand(parseFloat(screenDisplay.replace(/,/g, '')))
-    setCurrentOperator(operator)
-    setLastOperator(operator)
-    setResetDisplay(true)
-    setAcPressed(false)
-
-    console.log(
-      `'${currentOperator}' --> "operator": first : '${firstOperand}' , second : '${firstOperand}' , operator : '${currentOperator}' --> ${firstOperand}`
-    )
-  }
-
-  // ฟังก์ชันเปลี่ยนสัญลักษณ์
-  function inputSignChange() {
-    setScreenDisplay((prevDisplay) => (parseFloat(prevDisplay) * -1).toString())
-    setAcPressed(false)
-  }
-
-  // คำนวณค่าตาม operator ที่เลือก
-  function calculate() {
-    if (
-      firstOperand === null &&
-      secondOperand === null &&
-      currentOperator === null
-    ) {
-      console.log(`" ": first : '0' , second : '0' , operator : '?' --> 0`)
-      setScreenDisplay('0')
-      return
-    }
-
-    let secondOperandValue = secondOperand
-
-    if (currentOperator === null && lastOperator !== null) {
-      setFirstOperand(result !== null ? result : 0)
-      secondOperandValue = lastSecondOperand || 0
-      setCurrentOperator(lastOperator)
-    } else {
-      secondOperandValue = parseFloat(screenDisplay.replace(/,/g, ''))
-      setLastSecondOperand(secondOperandValue)
-    }
-
-    let calcResult = 0
-    switch (currentOperator || lastOperator) {
-      case '+':
-        calcResult = firstOperand + secondOperandValue
-        break
-      case '-':
-        calcResult = firstOperand - secondOperandValue
-        break
-      case '*':
-        calcResult = firstOperand * secondOperandValue
-        break
-      case '/':
-        if (secondOperandValue === 0) {
-          setScreenDisplay('Error')
-          setResult(null)
-          return
+        if (operators.includes(lastChar) && operators.includes(value)) {
+          return;
         } else {
-          calcResult = firstOperand / secondOperandValue
+          setInput((prev) => prev + value);
         }
-        break
+      }
     }
+  };
 
-    setScreenDisplay(calcResult.toString())
-    setFirstOperand(calcResult)
-    setResetDisplay(true)
-    setCurrentOperator(null)
+  const handleKeyPress = (event) => {
+    const key = event.key;
+    const operators = ['+', '-', '*', '/', '.', 'C'];
 
-    console.log(
-      `"=": first : '${firstOperand}' , second : '${secondOperandValue}' , operator : '${currentOperator}' --> ${calcResult}`
-    )
-  }
-
-  // ฟังก์ชันสำหรับล้างหน้าจอ
-  function clearDisplay() {
-    if (!acPressed) {
-      setScreenDisplay('0')
-      setResult(null)
-      setAcPressed(true)
-    } else {
-      setScreenDisplay('0')
-      setResult(null)
-      setFirstOperand(null)
-      setSecondOperand(null)
-      setCurrentOperator(null)
-      setLastSecondOperand(null)
-      setLastOperator(null)
-      setAcPressed(false)
+    if (key >= '0' && key <= '9') {
+      handleButtonClick(key);
+    } else if (key === '=' || key === '+') {
+      handleButtonClick(key === '=' ? '+' : '+');
+    } else if (operators.includes(key)) {
+      handleButtonClick(key);
+    } else if (key === 'Enter') {
+      handleButtonClick('=');
+    } else if (key === 'Backspace') {
+      setInput((prev) => prev.slice(0, -1));
+    } else if (key === 'Escape') {
+      handleButtonClick('C');
     }
-  }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [input]);
 
   return (
     <div className='cal-container'>
@@ -215,86 +61,60 @@ function Cal() {
         type='text'
         id='display'
         className='cal-display'
+        value={input}
         readOnly
-        value={screenDisplay}
       />
       <table className='cal-table'>
         <tbody>
           <tr>
-            <td className='cal-color' id='ac-btn' onClick={clearDisplay}>
+            <td className='cal-color' onClick={() => handleButtonClick('C')}>
               C
             </td>
-            <td className='cal-color' onClick={inputSignChange}>
-              +/-
+            <td className='cal-color' onClick={() => handleButtonClick('+/-')}>
+              +/- 
             </td>
-            <td className='cal-color' onClick={() => console.log('Percent')}>
+            <td className='cal-color' onClick={() => handleButtonClick('%')}>
               %
             </td>
-            <td className='cal-color' onClick={() => inputOperator('/')}>
+            <td className='cal-color' onClick={() => handleButtonClick('/')}>
               &divide;
             </td>
           </tr>
           <tr>
-            <td className='num-color' onClick={() => inputNumber(7)}>
-              7
-            </td>
-            <td className='num-color' onClick={() => inputNumber(8)}>
-              8
-            </td>
-            <td className='num-color' onClick={() => inputNumber(9)}>
-              9
-            </td>
-            <td className='cal-color' onClick={() => inputOperator('*')}>
+            <td className='num-color' onClick={() => handleButtonClick('7')}>7</td>
+            <td className='num-color' onClick={() => handleButtonClick('8')}>8</td>
+            <td className='num-color' onClick={() => handleButtonClick('9')}>9</td>
+            <td className='cal-color' onClick={() => handleButtonClick('*')}>
               &times;
             </td>
           </tr>
           <tr>
-            <td className='num-color' onClick={() => inputNumber(4)}>
-              4
-            </td>
-            <td className='num-color' onClick={() => inputNumber(5)}>
-              5
-            </td>
-            <td className='num-color' onClick={() => inputNumber(6)}>
-              6
-            </td>
-            <td className='cal-color' onClick={() => inputOperator('-')}>
+            <td className='num-color' onClick={() => handleButtonClick('4')}>4</td>
+            <td className='num-color' onClick={() => handleButtonClick('5')}>5</td>
+            <td className='num-color' onClick={() => handleButtonClick('6')}>6</td>
+            <td className='cal-color' onClick={() => handleButtonClick('-')}>
               &minus;
             </td>
           </tr>
           <tr>
-            <td className='num-color' onClick={() => inputNumber(1)}>
-              1
-            </td>
-            <td className='num-color' onClick={() => inputNumber(2)}>
-              2
-            </td>
-            <td className='num-color' onClick={() => inputNumber(3)}>
-              3
-            </td>
-            <td className='cal-color' onClick={() => inputOperator('+')}>
+            <td className='num-color' onClick={() => handleButtonClick('1')}>1</td>
+            <td className='num-color' onClick={() => handleButtonClick('2')}>2</td>
+            <td className='num-color' onClick={() => handleButtonClick('3')}>3</td>
+            <td className='cal-color' onClick={() => handleButtonClick('+')}>
               +
             </td>
           </tr>
           <tr>
-            <td
-              className='num-color'
-              colSpan='2'
-              onClick={() => inputNumber(0)}
-            >
-              0
-            </td>
-            <td className='num-color' onClick={inputDecimal}>
-              .
-            </td>
-            <td className='cal-color' onClick={calculate}>
+            <td className='num-color' colSpan='2' onClick={() => handleButtonClick('0')}>0</td>
+            <td className='num-color' onClick={() => handleButtonClick('.')}>.</td>
+            <td className='cal-color' onClick={() => handleButtonClick('=')}>
               =
             </td>
           </tr>
         </tbody>
       </table>
     </div>
-  )
+  );
 }
 
-export default Cal
+export default Cal;
