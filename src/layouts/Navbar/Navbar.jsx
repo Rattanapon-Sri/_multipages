@@ -16,6 +16,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
           Home
         </button>
       </Link>
+
       <Link to={'/calculator'}>
         <button
           className={
@@ -27,6 +28,20 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
           }}
         >
           Calculator
+        </button>
+      </Link>
+
+      <Link to={'/animation'}>
+        <button
+          className={
+            'btn ' +
+            (tab === 'animation' ? 'btn-primary' : 'btn-outline-primary')
+          }
+          onClick={() => {
+            setTab('animation')
+          }}
+        >
+          Animation
         </button>
       </Link>
 

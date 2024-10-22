@@ -9,6 +9,7 @@ import Todo from './pages/Todo/Todo'
 import Products from './pages/Products/Products'
 import Carts from './pages/Carts/Carts'
 import Login from './pages/Login/Login'
+import Animation from './pages/Animation/Animation'
 
 import { fetchProducts } from './data/products'
 
@@ -63,6 +64,7 @@ function App() {
           >
             <Route path={'/'} element={<Home />} />
             <Route path={'/home'} element={<Home />} />
+            <Route path={'/animation'} element={<Animation />} />
             <Route path={'/calculator'} element={<Calculator />} />
             <Route path={'/components'} element={<Components />} />
             <Route

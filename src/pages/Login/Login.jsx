@@ -16,7 +16,7 @@ function Login({ setToken , setRole}) {
         type='text'
         id='username'
         style={{ textAlign: "center" }}
-        placeholder='User'
+        placeholder='admin'
         ref={userRef}
       />
       <Form.Label className='mt-2' htmlFor='password'>
@@ -26,7 +26,7 @@ function Login({ setToken , setRole}) {
         type='password'
         id='password'
         style={{ textAlign: "center" }}
-        placeholder='Password'
+        placeholder='admin'
         ref={passRef}
       />
       <button
