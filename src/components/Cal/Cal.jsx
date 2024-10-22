@@ -4,19 +4,28 @@ import './Cal.css'
 function Cal() {
   const [input, setInput] = useState('0')
 
+  const calculateResult = (input) => {
+    try {
+      const sanitizedInput = input.replace(/[^-()\d/*+.]/g, '')
+      const result = new Function('return ' + sanitizedInput)()
+      return result.toString()
+    } catch (error) {
+      return 'Error'
+    }
+  }
+
   const handleButtonClick = (value) => {
     if (value === 'C') {
       setInput('0')
     } else if (value === '=') {
-      try {
-        setInput(eval(input).toString())
-      } catch (error) {
-        setInput('Error')
-      }
+      setInput(calculateResult(input))
     } else if (value === '+/-') {
-      // เปลี่ยนสัญญาณของเลขสุดท้าย
-      const newInput = input.endsWith('-') ? input.slice(0, -1) : input + '-'
-      setInput(newInput)
+      const match = input.match(/-?\d+(\.\d+)?$/)
+      if (match) {
+        const number = match[0]
+        const newInput = input.slice(0, -number.length) + (-parseFloat(number)).toString()
+        setInput(newInput)
+      }
     } else {
       if (input === '0' && value !== '.') {
         setInput(value)
@@ -25,12 +34,14 @@ function Cal() {
         const operators = ['+', '-', '*', '/']
 
         if (operators.includes(lastChar) && operators.includes(value)) {
-          // เปลี่ยนเครื่องหมาย
           setInput((prev) => prev.slice(0, -1) + value)
         } else {
           setInput((prev) => prev + value)
         }
       }
+    }
+    if (input === '') {
+      setInput('0')
     }
   }
 
@@ -47,7 +58,10 @@ function Cal() {
     } else if (key === 'Enter') {
       handleButtonClick('=')
     } else if (key === 'Backspace') {
-      setInput((prev) => prev.slice(0, -1))
+      setInput((prev) => {
+        const newInput = prev.slice(0, -1)
+        return newInput === '' ? '0' : newInput
+      })
     } else if (key === 'Escape') {
       handleButtonClick('C')
     }
