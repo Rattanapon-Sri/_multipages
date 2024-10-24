@@ -21,7 +21,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
         <button
           className={
             'btn ' +
-            (tab === 'calculator' ? 'btn-primary' : 'btn-outline-primary')
+            (tab === 'calculator' ? 'btn-success' : 'btn-outline-success')
           }
           onClick={() => {
             setTab('calculator')
@@ -35,7 +35,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
         <button
           className={
             'btn ' +
-            (tab === 'animation' ? 'btn-primary' : 'btn-outline-primary')
+            (tab === 'animation' ? 'btn-warning' : 'btn-outline-warning')
           }
           onClick={() => {
             setTab('animation')
@@ -49,7 +49,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
         <button
           className={
             'btn ' +
-            (tab === 'components' ? 'btn-primary' : 'btn-outline-primary')
+            (tab === 'components' ? 'btn-info' : 'btn-outline-info')
           }
           onClick={() => {
             setTab('components')
@@ -62,7 +62,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
       <Link to={'/todo'}>
         <button
           className={
-            'btn ' + (tab === 'todo' ? 'btn-primary' : 'btn-outline-primary')
+            'btn ' + (tab === 'todo' ? 'btn-dark' : 'btn-outline-dark')
           }
           onClick={() => {
             setTab('todo')
@@ -76,7 +76,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
         <button
           className={
             'btn ' +
-            (tab === 'products' ? 'btn-primary' : 'btn-outline-primary')
+            (tab === 'products' ? 'btn-success' : 'btn-outline-success')
           }
           onClick={() => {
             setTab('products')
@@ -90,7 +90,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
         <button
           className={
             'position-relative btn ' +
-            (tab === 'carts' ? 'btn-primary' : 'btn-outline-primary')
+            (tab === 'carts' ? 'btn-warning' : 'btn-outline-warning')
           }
           onClick={() => {
             setTab('carts')

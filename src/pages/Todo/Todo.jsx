@@ -158,6 +158,7 @@ function Todo() {
               setOnlyWaiting(e.target.checked);
             }}
             ref={onlyWaitingRef}
+            style={{ marginTop : "10px" }}
           />
           <label className='form-check-label' htmlFor='flexSwitchCheckChecked'>
             Show only&nbsp;
