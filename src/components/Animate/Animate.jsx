@@ -1,6 +1,13 @@
 import { react, useState, useEffect } from 'react'
-import './Animate.css' // อย่าลืมเพิ่ม CSS ที่จำเป็น
+import './Animate.css' // CSS ที่จำเป็น
 import 'bootstrap/dist/css/bootstrap.min.css'
+
+import basketball from '../../assets/basketball.png'
+import football from '../../assets/football.png'
+import volleyball from '../../assets/volleyball.png'
+import human from '../../assets/human.png'
+import cartoon from '../../assets/cartoon.png'
+import logo from '../../assets/logo.png'
 
 const fieldWidth = 765
 const fieldHeight = 400
@@ -16,7 +23,6 @@ const Animate = () => {
   const [goRight, setGoRight] = useState(true)
   const [goDown, setGoDown] = useState(true)
   const [imageType, setImageType] = useState('none')
-  const [setlectedImage, setSelectedImage] = useState('none')
 
   const maxX = fieldWidth - ballSize - 2
   const maxY = fieldHeight - ballSize - 2
@@ -28,7 +34,6 @@ const Animate = () => {
     let newY = y
     let newRotation = rotation
 
-    // Move right
     if (goRight) {
       newX += vX
       if (newX >= maxX) {
@@ -45,7 +50,6 @@ const Animate = () => {
       }
     }
 
-    // Move down
     if (goDown) {
       newY += vY
       if (newY >= maxY) {
@@ -85,7 +89,16 @@ const Animate = () => {
 
   const changeImage = (type) => {
     setImageType(type)
-    setSelectedImage(type);
+  }
+
+  const imageMap = {
+    none: 'none',
+    basketball: basketball,
+    football: football,
+    volleyball: volleyball,
+    human: human,
+    cartoon: cartoon,
+    logo: logo,
   }
 
   useEffect(() => {
@@ -133,7 +146,7 @@ const Animate = () => {
             left: x,
             top: y,
             backgroundImage:
-              imageType !== 'none' ? `url('./${imageType}.png')` : 'none',
+              imageType !== 'none' ? `url(${imageMap[imageType]})` : 'none',
             backgroundSize: '120%',
             transform: `rotate(${rotation}deg)`,
           }}
@@ -143,7 +156,9 @@ const Animate = () => {
       <button
         id='run'
         onClick={toggleRun}
-        className={`btn ${running ? 'btn-danger bi-pause' : 'btn-success bi-play'}`}
+        className={`btn ${
+          running ? 'btn-danger bi-pause' : 'btn-success bi-play'
+        }`}
       >
         {running ? 'Pause' : 'Run'}
       </button>

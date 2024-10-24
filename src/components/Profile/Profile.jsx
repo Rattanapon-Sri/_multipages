@@ -1,13 +1,13 @@
 import React from "react";
 import "./Profile.css";
-import Profile from "../../../public/profileimg.jpg";
+import rofile from "../../assets/profile.JPG";
 
 function Profile() {
   return (
     <div className='profile-container'>
       <div className='profile-grid'>
         <div className='profile-box-1'>
-          <img className='profile-image' src={Profile} alt='' />
+          <img className='profile-image' src={rofile} alt='' />
         </div>
         <div className="profile-box-2">
             ชื่อ : นายรัตนพลศรีโนนยาง รหัส 66044213 <br />
