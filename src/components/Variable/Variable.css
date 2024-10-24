@@ -1,0 +1,31 @@
+.variable-wrapper {
+    border: 1px solid;
+    border-radius: 0.5rem;
+    padding:0 0.5rem 0.5rem 0.5rem;
+    background-color: rgb(255, 192, 192);
+    margin-bottom: 0.5rem;
+}
+
+.variable-title {
+    color: red;
+    font-weight: bold;
+}
+
+.variable-button {
+    border: 1px solid;
+    border-radius: 0.5rem;
+}
+
+.variable-dec {
+    background-color: salmon;
+}
+
+.variable-inc {
+    background-color: lightgreen;
+}
+
+.variable-value {
+    margin: 0 1rem;
+    font-size: 2rem;
+    font-weight: bold;
+}

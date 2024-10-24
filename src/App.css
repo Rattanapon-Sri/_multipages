@@ -1,0 +1,14 @@
+#root {
+  max-width: 1280px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.app-container {
+  /* border: 2px solid black; */
+  /* border-radius: 20px; */
+  width: 1020px;
+  /* box-shadow: 10px 10px 10px rgb(0, 0, 0); */
+  margin: 0 auto;
+}
