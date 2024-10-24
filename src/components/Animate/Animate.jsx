@@ -143,7 +143,7 @@ const Animate = () => {
       <button
         id='run'
         onClick={toggleRun}
-        className={`btn ${running ? 'btn-danger' : 'btn-success'}`}
+        className={`btn ${running ? 'btn-danger bi-pause' : 'btn-success bi-play'}`}
       >
         {running ? 'Pause' : 'Run'}
       </button>
