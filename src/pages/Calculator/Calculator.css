@@ -1,6 +1,8 @@
 .calulator-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 550px;
+  height: 690px;
 }
+

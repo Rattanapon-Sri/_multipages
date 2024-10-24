@@ -6,12 +6,22 @@ function Cal() {
 
   const calculateResult = (input) => {
     try {
-      const sanitizedInput = input.replace(/[^-()\d/*+.]/g, '')
+      const sanitizedInput = input.replace(/,/g, '') // Remove commas before calculating
       const result = new Function('return ' + sanitizedInput)()
-      return result.toString()
+      return formatNumberWithCommas(result) // Format the result with commas
     } catch (error) {
       return 'Error'
     }
+  }
+
+  const formatNumberWithCommas = (number) => {
+    // Handle large numbers and decimal values
+    if (typeof number === 'number' || !isNaN(number)) {
+      const parts = number.toString().split('.')
+      parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+      return parts.join('.')
+    }
+    return number
   }
 
   const handleButtonClick = (value) => {
@@ -24,21 +34,23 @@ function Cal() {
       if (match) {
         const number = match[0]
         const newInput = input.slice(0, -number.length) + (-parseFloat(number)).toString()
-        setInput(newInput)
+        setInput(formatNumberWithCommas(newInput))
       }
     } else {
-      if (input === '0' && value !== '.') {
-        setInput(value)
+      let newInput = input.replace(/,/g, ''); // Remove commas for processing
+      if (newInput === '0' && value !== '.') {
+        newInput = value;
       } else {
-        const lastChar = input[input.length - 1]
-        const operators = ['+', '-', '*', '/']
+        const lastChar = newInput[newInput.length - 1];
+        const operators = ['+', '-', '*', '/'];
 
         if (operators.includes(lastChar) && operators.includes(value)) {
-          setInput((prev) => prev.slice(0, -1) + value)
+          newInput = newInput.slice(0, -1) + value; // Replace the last operator
         } else {
-          setInput((prev) => prev + value)
+          newInput += value; // Append value
         }
       }
+      setInput(formatNumberWithCommas(newInput)); // Set the formatted input with commas
     }
     if (input === '') {
       setInput('0')
@@ -59,9 +71,9 @@ function Cal() {
       handleButtonClick('=')
     } else if (key === 'Backspace') {
       setInput((prev) => {
-        const newInput = prev.slice(0, -1)
-        return newInput === '' ? '0' : newInput
-      })
+        const newInput = prev.slice(0, -1).replace(/,/g, ''); // Remove commas before processing
+        return newInput === '' ? '0' : formatNumberWithCommas(newInput);
+      });
     } else if (key === 'Escape') {
       handleButtonClick('C')
     }
@@ -92,7 +104,7 @@ function Cal() {
             <td className='cal-color' onClick={() => handleButtonClick('+/-')}>
               +/-
             </td>
-            <td className='cal-color' onClick={() => handleButtonClick('%')}>
+            <td className='cal-color'>
               %
             </td>
             <td className='cal-color' onClick={() => handleButtonClick('/')}>
