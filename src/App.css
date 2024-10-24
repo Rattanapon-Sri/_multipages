@@ -6,9 +6,9 @@
 }
 
 .app-container {
-  border: 2px solid black;
-  border-radius: 20px;
+  /* border: 2px solid black; */
+  /* border-radius: 20px; */
   width: 1020px;
-  box-shadow: 10px 10px 10px rgb(0, 0, 0);
+  /* box-shadow: 10px 10px 10px rgb(0, 0, 0); */
   margin: 0 auto;
 }

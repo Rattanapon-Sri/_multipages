@@ -1,6 +1,7 @@
 
 .components-container {
-  border: 1px solid;
+  border: 2px solid;
+  box-shadow:  1px 5px 10px  rgb(0, 0, 0);
   border-radius: 0.5rem;
   text-align: center;
   margin: 0.5rem;

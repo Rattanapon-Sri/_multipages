@@ -13,7 +13,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
             setTab('home')
           }}
         >
-          Home
+          <span className='bi-house-door'>&nbsp;&nbsp;</span>Home
         </button>
       </Link>
 
@@ -27,7 +27,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
             setTab('calculator')
           }}
         >
-          Calculator
+          <span className='bi-calculator'>&nbsp;&nbsp;</span>Calculator
         </button>
       </Link>
 
@@ -41,7 +41,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
             setTab('animation')
           }}
         >
-          Animation
+          <span className='bi-palette'>&nbsp;&nbsp;</span>Animation
         </button>
       </Link>
 
@@ -55,7 +55,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
             setTab('components')
           }}
         >
-          Components
+          <span className='bi-layers'>&nbsp;&nbsp;</span>Components
         </button>
       </Link>
 
@@ -68,7 +68,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
             setTab('todo')
           }}
         >
-          Todo
+          <span className='bi-list-ul'>&nbsp;&nbsp;</span>Todo
         </button>
       </Link>
 
@@ -82,7 +82,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
             setTab('products')
           }}
         >
-          Products ({products.length})
+          <span className='bi-shop'>&nbsp;&nbsp;</span>Products ({products.length})
         </button>
       </Link>
 
@@ -96,7 +96,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
             setTab('carts')
           }}
         >
-          Carts
+          <span className='bi-cart'>&nbsp;&nbsp;</span>Carts
           {carts.length > 0 && (
             <span class='position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger'>
               {carts.length < 10 ? carts.length : '9+'}
@@ -111,7 +111,7 @@ function Navbar({ tab, setTab, products, carts, setToken, role }) {
         style={{ marginLeft: '1rem' }}
         onClick={() => setToken('')}
       >
-        Logout
+        <span className='bi-box-arrow-right'>&nbsp;&nbsp;</span>Logout
       </button>
     </div>
   )

@@ -11,22 +11,22 @@ function Login({ setToken , setRole}) {
 
   return (
     <div className='login-container'>
-      <Form.Label htmlFor='username'>Username</Form.Label>
+      <Form.Label htmlFor='username'><span className="bi-people-fill">&nbsp;&nbsp;Username</span></Form.Label>
       <Form.Control
         type='text'
         id='username'
         style={{ textAlign: "center" }}
-        placeholder='admin'
+        placeholder='user'
         ref={userRef}
       />
       <Form.Label className='mt-2' htmlFor='password'>
-        Password
+        <span className="bi-key-fill">&nbsp;&nbsp;Password</span>
       </Form.Label>
       <Form.Control
         type='password'
         id='password'
         style={{ textAlign: "center" }}
-        placeholder='admin'
+        placeholder='pass'
         ref={passRef}
       />
       <button
@@ -48,7 +48,7 @@ function Login({ setToken , setRole}) {
           }
         }}
       >
-        Login
+        <span className='bi-box-arrow-in-right'>&nbsp;&nbsp;</span>Login
       </button>
     </div>
   );
